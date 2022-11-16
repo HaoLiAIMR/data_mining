@@ -145,7 +145,7 @@ def main(folder_path, pH, v0, v1):
 
     return stable_materials
 
-folder_path = '/Users/yusukehashimoto/Documents/pycharm/data_mining/'
+folder_path = './'
 
 with st.sidebar:
     pH = st.text_input(
