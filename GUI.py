@@ -150,7 +150,7 @@ folder_path = './'
 with st.sidebar:
     pH = st.slider(
         'Please enter the pH value.',
-        1, 14,  7, 1)
+        0, 14, 7, 1)
     v0, v1 = st.slider(
         'Please enter begin and end potentials.',
         -1.2, 2.16, (0.0, 1.0)
