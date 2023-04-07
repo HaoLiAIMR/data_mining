@@ -1,9 +1,8 @@
 import streamlit as st
-import plotly.express as px
 
 import pandas as pd
 import numpy as np
-# import re
+import re
 import ast
 
 
@@ -87,19 +86,18 @@ def stable_phase(V_num_list, species_i):
     phase = dict(stable_species_VS_SHE=str(rst_new))
     return phase
 
-
 def main(folder_path, pH, v0, v1):
+
     v0_real, v1_real, index_rename = parameter(pH, v0, v1)
-    path = folder_path + "pH=" + str(pH) + ".xlsx"
-    # path = "D:/Work in Tohoku/筛选材料/rare_earthO/rare_earthO_ph="+str(ph)+".xlsx"
+    path = folder_path + "pH="+str(pH)+".xlsx"
+    #path = "D:/Work in Tohoku/筛选材料/rare_earthO/rare_earthO_ph="+str(ph)+".xlsx"
 
     database, data_V = read_database(path, index_rename)
 
     stable_materials = []
     for i in range(0, len(database)):  # len(database)
         # print(i)
-        Gpbx_i_max, entry_id_i, species_i, ion_num, V_num_list, material_id = Gpbx_entry_id_ion(i, v0_real, v1_real,
-                                                                                                database, data_V)
+        Gpbx_i_max, entry_id_i, species_i, ion_num, V_num_list, material_id = Gpbx_entry_id_ion(i, v0_real, v1_real, database, data_V)
         if Gpbx_i_max < 0.5:
 
             if material_id in str(entry_id_i):
@@ -143,27 +141,26 @@ def main(folder_path, pH, v0, v1):
         else:
             continue
     # print(pd.DataFrame(stable_materials))
-    # pd.DataFrame(stable_materials).to_excel("rastable_materials.xlsx", index=None)
+    #pd.DataFrame(stable_materials).to_excel("rastable_materials.xlsx", index=None)
 
     return stable_materials
 
-
 folder_path = './'
 
-# with st.sidebar:
-#     pH = st.slider(
-#         'Please enter the pH value.',
-#         0, 14, 7, 1)
-#     v0, v1 = st.slider(
-#         'Please enter begin and end potentials.',
-#         -1.2, 2.16, (0.0, 1.0)
-#     )
-# v0 = st.text_input(
-#     "Please enter the begin potential (the potential range (vs RHE) is -1.2 ~ 2.16)",
-# )
-# v1 = st.text_input(
-#     "Please enter the end potential (the potential range (vs RHE) is -1.2 ~ 2.16)",
-# )
+with st.sidebar:
+    pH = st.slider(
+        'Please enter the pH value.',
+        0, 14, 7, 1)
+    v0, v1 = st.slider(
+        'Please enter begin and end potentials.',
+        -1.2, 2.16, (0.0, 1.0)
+    )
+    # v0 = st.text_input(
+    #     "Please enter the begin potential (the potential range (vs RHE) is -1.2 ~ 2.16)",
+    # )
+    # v1 = st.text_input(
+    #     "Please enter the end potential (the potential range (vs RHE) is -1.2 ~ 2.16)",
+    # )
 # pH = st.text_input(
 #     "Please enter the pH value"
 # )
@@ -171,53 +168,8 @@ folder_path = './'
 # pH = int(input("Please enter the pH value:  "))
 # v0 = input("Please enter the begin potential(the potential range (vs RHE) is -1.2 ~ 2.16)  ")
 # v1 = input("Please enter the end potential(the potential range (vs RHE) is -1.2 ~ 2.16)  ")
-# print(pH, v0, v1)
+print(pH, v0, v1)
 
-df_s = pd.DataFrame()
-
-st.subheader('Aqueous stable metal oxides')
-
-#st.text('test')
-
-with st.sidebar:
-    v0, v1 = st.slider(
-        'Please select the range of potential vs. SHE.',
-        -1.2, 2.16, (0.0, 1.0)
-    )
-
-    pH0, pH1 = st.slider(
-        'Please select the range of pH.',
-        0, 14, (0, 14)
-    )
-
-    if st.button('Start calculation', key='Start', use_container_width=True):
-
-        progress_bar = st.progress(0)
-
-        for i, pH in enumerate(range(pH0, pH1 + 1, 1)):
-            progress_bar.progress((i) / (pH1 - pH0 + 1), text=f'Analyzing data for pH = {pH}.')
-            print(pH)
-            if (pH != '') & (v0 != '') & (v1 != ''):
-                df_t = main(folder_path, int(pH), str(v0), str(v1))
-                df_t = pd.DataFrame(df_t)
-                df_t['pH'] = int(pH)
-                df_s = pd.concat([df_s, df_t])
-        progress_bar.progress(100, text=f'Analyzing data for pH = {pH}.')
-
-if len(df_s) != 0:
-    df_s = df_s.rename(columns={'max_Gpbx': 'Max Gpbx', 'material_id': 'Material ID', 'stable_species_VS_SHE': 'Stable species vs. SHE', 'icsd_ids': 'ICSD ID'})
-    df_s['pH'] = df_s['pH'].astype(str)
-
-    fig = px.scatter(
-        df_s,
-        x='pH',
-        y='Max Gpbx',
-        color='Max Gpbx',
-        hover_name='pretty_formula',
-        hover_data=['Stable species vs. SHE', 'Material ID', 'ICSD ID'],
-        color_continuous_scale='spectral',
-    )
-    fig.update_xaxes(
-        tickvals=list(range(pH0, pH1 + 1, 1)),  # set the tick values
-    )
-    st.plotly_chart(fig)
+if (pH != '') & (v0 != '') & (v1 != ''):
+    stable_materials = main(folder_path, int(pH), str(v0), str(v1))
+    st.dataframe(stable_materials)
