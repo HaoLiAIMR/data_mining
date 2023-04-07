@@ -193,7 +193,6 @@ with st.sidebar:
     if st.button('Start calculation', key='Start', use_container_width=True):
 
         progress_bar = st.progress(0)
-
         for i, pH in enumerate(range(pH0, pH1 + 1, 1)):
             progress_bar.progress((i) / (pH1 - pH0 + 1), text=f'Analyzing data for pH = {pH}.')
             print(pH)
@@ -207,6 +206,7 @@ with st.sidebar:
 if len(df_s) != 0:
     df_s = df_s.rename(columns={'max_Gpbx': 'Max Gpbx', 'material_id': 'Material ID', 'stable_species_VS_SHE': 'Stable species vs. SHE', 'icsd_ids': 'ICSD ID'})
     df_s['pH'] = df_s['pH'].astype(str)
+    df_s['Max Gpbx'] = df_s['Max Gpbx'].round(3)
 
     fig = px.scatter(
         df_s,
