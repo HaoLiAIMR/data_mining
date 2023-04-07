@@ -221,5 +221,3 @@ if len(df_s) != 0:
         tickvals=list(range(pH0, pH1 + 1, 1)),  # set the tick values
     )
     st.plotly_chart(fig)
-
-    df_s.to_csv('df.csv')
