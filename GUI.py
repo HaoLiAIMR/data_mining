@@ -36,6 +36,7 @@ def parameter(pH, v0, v1):
     return v0_real, v1_real, index_rename
 
 
+@st.cache_resource
 def read_database(path, index_rename):
     database = pd.read_excel(path, header=0, dtype=object)
     data_V = database.iloc[:, 3:]
