@@ -37,8 +37,10 @@ def parameter(pH, v0, v1):
 
 
 @st.cache_resource
-def read_database(path, index_rename):
-    database = pd.read_excel(path, header=0, dtype=object)
+def read_database(path, index_rename, path_pkl):
+    # database = pd.read_excel(path, header=0, dtype=object)
+    # database.to_pickle(path_pkl)
+    database = pd.read_pickle(path_pkl)
     data_V = database.iloc[:, 3:]
     data_V.columns = index_rename
     return database, data_V
@@ -92,9 +94,10 @@ def stable_phase(V_num_list, species_i):
 def main(folder_path, pH, v0, v1):
     v0_real, v1_real, index_rename = parameter(pH, v0, v1)
     path = folder_path + "pH=" + str(pH) + ".xlsx"
+    path_pkl = folder_path + "pH=" + str(pH) + ".pkl"
     # path = "D:/Work in Tohoku/筛选材料/rare_earthO/rare_earthO_ph="+str(ph)+".xlsx"
 
-    database, data_V = read_database(path, index_rename)
+    database, data_V = read_database(path, index_rename, path_pkl)
 
     stable_materials = []
     for i in range(0, len(database)):  # len(database)
