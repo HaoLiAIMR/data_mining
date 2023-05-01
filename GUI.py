@@ -36,7 +36,7 @@ def parameter(pH, v0, v1):
     return v0_real, v1_real, index_rename
 
 
-@st.cache_resource
+@st.cache_data
 def read_database(path, index_rename, path_pkl):
     # database = pd.read_excel(path, header=0, dtype=object)
     # database.to_pickle(path_pkl)
