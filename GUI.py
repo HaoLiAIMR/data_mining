@@ -185,7 +185,7 @@ st.subheader('Aqueous stable metal oxides')
 
 with st.sidebar:
     v0, v1 = st.slider(
-        'Please select the range of potential vs. SHE.',
+        'Please select the range of potential vs. RHE.',
         -1.2, 2.16, (0.0, 1.0)
     )
 
