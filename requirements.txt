@@ -1,8 +1,11 @@
 numpy==1.21.6
 pandas==1.4.2
 plotly==5.13.0
-streamlit==1.18.1
+#streamlit==1.18.1
 tqdm==4.64.1
 openpyxl==3.0.9
-altair
-vega_datasets
+#altair
+#vega_datasets
+streamlit==1.25.0
+altair==4.2.2
+
